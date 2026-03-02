@@ -1,0 +1,5 @@
+crewai
+deepseek-sdk
+faiss-cpu
+streamlit
+pillow

@@ -1,0 +1,22 @@
+[
+  {
+    "disease": "湿疹",
+    "symptoms": "皮肤红肿 瘙痒 丘疹 水疱",
+    "description": "湿疹是一种常见炎症性皮肤炎症疾病"
+  },
+  {
+    "disease": "感冒",
+    "symptoms": "咳嗽 发烧 流鼻涕 喉咙痛",
+    "description": "感冒是常见上呼吸道感染"
+  },
+  {
+    "disease": "过敏性皮炎",
+    "symptoms": "皮肤发红 瘙痒 起疹子",
+    "description": "由过敏引起的皮肤炎症反应"
+  },
+  {
+    "disease": "荨麻疹",
+    "symptoms": "皮肤风团 瘙痒 红斑",
+    "description": "一种常见过敏性皮肤病"
+  }
+]
