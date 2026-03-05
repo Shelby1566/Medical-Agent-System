@@ -1,7 +1,7 @@
 import json
 import os
 import math
-from collections import defaultdict
+import jieba
 
 class BayesianDiagnosisEngine:
     def __init__(self, data_path):
@@ -13,44 +13,40 @@ class BayesianDiagnosisEngine:
         with open(self.data_path, "r", encoding="utf-8") as f:
             self.diseases = json.load(f)
 
-        # 计算先验概率（默认均匀分布）
+        # 先验概率
         self.prior = 1 / len(self.diseases)
 
+    # 中文分词
     def _tokenize(self, text):
-        # 简单按空格、顿号、逗号分割
-        separators = [" ", "、", ",", "，"]
-        for sep in separators:
-            text = text.replace(sep, " ")
-        return list(set(text.split()))
+        return list(set(jieba.lcut(text)))
 
     def predict(self, user_symptoms, top_k=3):
+
         user_symptoms = self._tokenize(user_symptoms)
 
         results = []
 
         for disease in self.diseases:
+
             disease_symptoms = self._tokenize(disease["symptoms"])
 
-            # 使用对数避免下溢
-            log_prob = math.log(self.prior)
+            score = 0
 
-            for symptom in user_symptoms:
-                if symptom in disease_symptoms:
-                    likelihood = 0.8   # 出现症状的条件概率
+            for us in user_symptoms:
+
+                if any(us in ds or ds in us for ds in disease_symptoms):
+                    score += 2   # 强匹配
                 else:
-                    likelihood = 0.2   # 未出现的平滑概率
-
-                log_prob += math.log(likelihood)
+                    score -= 1   # 不匹配
 
             results.append({
                 "disease": disease["disease"],
-                "score": log_prob
+                "score": score
             })
 
-        # 按概率排序
         results.sort(key=lambda x: x["score"], reverse=True)
 
-        # 转换成归一化概率
+        # 转概率
         scores = [math.exp(r["score"]) for r in results]
         total = sum(scores)
 
